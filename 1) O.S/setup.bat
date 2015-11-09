@@ -1,0 +1,1 @@
+gvim -S vimsetup.vim

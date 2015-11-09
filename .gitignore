@@ -1,0 +1,6 @@
+*.class
+*.form
+*nbproject*
+*build*
+*.mf
+*.ico
