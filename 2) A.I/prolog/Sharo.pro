@@ -6,6 +6,7 @@ predicates
     nondeterm region_colors(region_number, region_color, board).
     nondeterm region_neighbor(region_number, region_number, board).
     nondeterm same_color(region_number, region_number, region_color, board).
+    nondeterm same_colors(region_number).
     nondeterm diff_color_board(region_number, region_number).
     
 clauses
@@ -34,6 +35,10 @@ clauses
         region_neighbor(Region_number1, Region_number2, Board),
         region_colors(Region_number2, Color, Board),
         Region_number1 <> Region_number2.
+    
+    same_colors(Region_one):-
+        region_colors(Region_one, _, _), write("Hello: ", Region_one).
+
 
     diff_color_board(Region_number1, Region_number2):- 
         region_colors(Region_number1, Color, a),
@@ -42,4 +47,4 @@ clauses
         Color <> Color2.
         %Board <> Board2.
 goal
-same_color(G, H, J, T).
+same_colors(G).

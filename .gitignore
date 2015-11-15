@@ -4,3 +4,5 @@
 *build*
 *.mf
 *.ico
+*.xml
+*.xmi
