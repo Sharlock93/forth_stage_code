@@ -101,13 +101,4 @@ public class DESKeySubModule {
         return res;
     }
 
-    public static void main(String[] args) {
-
-        long number =  0b0001001100110100010101110111100110011011101111001101111111110001L;
-
-        DESKeySubModule shar = new DESKeySubModule(number);
-
-        /* System.out.println(shar.permutateUsingTable(number,test, 64)); */
-
-    }
 }

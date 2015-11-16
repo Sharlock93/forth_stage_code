@@ -1,11 +1,15 @@
 public class shSch {
     int total_time_spend;
     int total_time_waited;
-
+    
+    int execution_pointer;
+    boolean preemptive;
     shProc[] process;
 
     public shSch(shProc[] procs) {
         this.process = procs;
+        preemptive = false;
+        execution_pointer = -1;
 
         for(int i = 0; i < process.length; ++i) {
             for(int j = i; j < process.length; ++j) {
@@ -31,26 +35,36 @@ public class shSch {
         int total_burst_time = 0;
         boolean execute = true;
         while(execute) {
+        	int execute_for = 0;
             
             if(checkReady()) {
-                int indexProcess = processToExec();
-                System.out.println("Running process: " + indexProcess);
-                if(indexProcess > 0)
-                    runProcess(indexProcess, 1);
+                execution_pointer = processToExec();
+                if(execution_pointer >= 0) {
+                	execute_for = (preemptive) ? 1 : process[execution_pointer].burst_time;
+                    runProcess(execution_pointer, execute_for);
+                    
+                }
+            } else {
+            	System.out.println("Waiting...");
+            	execute_for = 1;
             }
 
             if(allDone()) {
                 execute = false; 
             }
-
-            reduceETA(1); 
+            
+//            if(preemptive) {
+//            	
+//            }
+            //if(execution_pointer >= 0)
+            	reduceETA(execution_pointer, (preemptive) ? 1 : execute_for); 
             total_time_spend++;
         } 
     }
 
     private boolean checkReady() {
         for(int i = 0; i < process.length; ++i) {
-            if(process[i].arrive_time == 0) {
+            if(process[i].arrive_time <= 0) {
                 return true;
             } 
         } 
@@ -65,7 +79,10 @@ public class shSch {
         return true;
     }
     private void runProcess(int index, int amount) {
+    	
         process[index].burst_time -= amount;
+        System.out.print("Running process: " + (index + 1) + " for " + amount + " seconds");
+        System.out.println("has been waiting for " + process[index].wait_time + " BT is now: " + process[index].burst_time);
         if(process[index].burst_time <= 0)
             process[index].burst_time = 0;
    }
@@ -83,7 +100,8 @@ public class shSch {
                (this.process[i].arrive_time <= 0) &&
                ( this.process[i].burst_time < shortest ) )
            {
-               System.out.println("hello");
+               //System.out.println("hello");
+               shortest = this.process[i].burst_time;
                index = i;
            }
         }  
@@ -91,10 +109,29 @@ public class shSch {
         return index;
     }
 
-    private void reduceETA(int eta) {
+    private void reduceETA(int execute, int eta) {
         for(int i = 0; i < process.length; ++i) {
-            if(process[i].burst_time > 0)
-                process[i].arrive_time -= eta;
+        	if(preemptive) {
+	        	if( process[i].arrive_time > 0) {
+	        		process[i].arrive_time -= eta;
+	        	} else if((execute != i) && (process[i].burst_time > 0)) {
+	        		process[i].wait_time++;
+	        	}
+        	} else  {
+        		//Note(sharo): this a bit broken in non-preemptive, non ready-zero processes.
+        		//the check must be on something else
+        		if(process[i].burst_time > 0) {
+        			process[i].arrive_time -= eta;
+        			process[i].wait_time = Math.abs(process[i].arrive_time);
+        		} else if((execute != i) &&
+        				   (process[i].burst_time > 0))
+        		{
+        			process[i].arrive_time -= eta;
+        			process[i].wait_time = Math.abs(process[i].arrive_time);
+        		}
+        		
+        		
+        	}	
         }
     }
 
@@ -105,8 +142,8 @@ public class shSch {
             System.out.println(String.format(form, process[i].id, process[i].burst_time, process[i].wait_time));
         }
 
-        System.out.println("time spent exec: " + total_time_spend);
-        System.out.println("time spent waiting: " + total_time_waited);
-        System.out.println("Avrg time: " + total_time_waited/ process.length);
+//        System.out.println("time spent exec: " + total_time_spend);
+//        System.out.println("time spent waiting: " + total_time_waited);
+//        System.out.println("Avrg time: " + total_time_waited/ process.length);
     }
 }

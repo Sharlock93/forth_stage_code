@@ -17,7 +17,7 @@ public class shSchMain {
         /* } */
         /*  */
 
-        procs[0] = new shProc(0, 7, 0);
+        procs[0] = new shProc(0, 7, 1);
         procs[1] = new shProc(1, 4, 2);
         procs[2] = new shProc(2, 1, 4);
         procs[3] = new shProc(3, 4, 5);
@@ -25,7 +25,7 @@ public class shSchMain {
         shSch shar = new shSch(procs);
         System.out.println();
         shar.exec();
-        /* shar.printStuff(); */
+        shar.printStuff();
 
     }
 }
