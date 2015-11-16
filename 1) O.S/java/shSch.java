@@ -8,7 +8,7 @@ public class shSch {
 
     public shSch(shProc[] procs) {
         this.process = procs;
-        preemptive = false;
+        preemptive = true;
         execution_pointer = -1;
 
         for(int i = 0; i < process.length; ++i) {
@@ -19,6 +19,17 @@ public class shSch {
                     process[j] = temp;
                 }
             } 
+        }
+
+
+    }
+    
+    public void executeFCFS() {
+        int total_time_spend = 0;    
+        for(int i = 0; i < process.length; ++i) {
+            process[i].wait_time = total_time_spend - process[i].arrive_time;
+            total_time_spend += process[i].burst_time;
+            process[i].turn_around_time = process[i].burst_time  + process[i].wait_time;
         }
 
 
@@ -62,6 +73,8 @@ public class shSch {
         } 
     }
 
+
+
     private boolean checkReady() {
         for(int i = 0; i < process.length; ++i) {
             if(process[i].arrive_time <= 0) {
@@ -72,20 +85,20 @@ public class shSch {
     }
 
     private boolean allDone() {
-    
+
         for(int i = 0; i < process.length; ++i) 
             if(process[i].burst_time > 0) return false;
 
         return true;
     }
     private void runProcess(int index, int amount) {
-    	
+
         process[index].burst_time -= amount;
         System.out.print("Running process: " + (index + 1) + " for " + amount + " seconds");
         System.out.println("has been waiting for " + process[index].wait_time + " BT is now: " + process[index].burst_time);
         if(process[index].burst_time <= 0)
             process[index].burst_time = 0;
-   }
+    }
 
     /* private int runProcessForSecs(shProc process, int time) { */
     /*     System.out.println("Running Process id (" + process.id + ") for " + time); */
@@ -137,11 +150,10 @@ public class shSch {
 
 
     public void printStuff() {
-        String form = "pprocess id: %d has %d exec time, waited: %d";
+        String form = "pprocess id: %d has %d exec time, waited: %d, turn: %d";
         for(int i = 0; i < process.length; ++i) {
-            System.out.println(String.format(form, process[i].id, process[i].burst_time, process[i].wait_time));
+            System.out.println(String.format(form, process[i].id, process[i].burst_time, process[i].wait_time, process[i].turn_around_time));
         }
-
 //        System.out.println("time spent exec: " + total_time_spend);
 //        System.out.println("time spent waiting: " + total_time_waited);
 //        System.out.println("Avrg time: " + total_time_waited/ process.length);

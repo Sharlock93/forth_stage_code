@@ -3,6 +3,8 @@ public class shProc {
     int burst_time;
     int wait_time;
     int arrive_time;
+    int turn_around_time;
+    int finish_time;
 
 
     public shProc(int id, int burst_time, int arrive_time) {
