@@ -7,7 +7,6 @@ public class shSchMain {
         System.out.print("Enter number of processes: ");
         int procSize = input.nextInt();
         shProc[] procs = new shProc[procSize];
-
         for(int i = 0; i < procs.length; ++i) { 
             System.out.print("Enter Execution time for process Id (" + i + "): ");
             int procTime = input.nextInt();  
