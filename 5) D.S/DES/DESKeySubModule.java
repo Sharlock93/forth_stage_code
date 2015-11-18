@@ -51,13 +51,14 @@ public class DESKeySubModule {
         for(int i = 0; i < subKeyF.length; ++i) {
             subKeyF[i] = ((long)(subKeys[i][0]) << 28) | subKeys[i][1];
             subKeyF[i] = permutateUsingTable(subKeyF[i], PC2, 56);
-            System.out.println("Key " + (i+1) + ":       " + Long.toBinaryString(subKeyF[i]));
+            /* System.out.println("Key " + (i+1) + ":       " + Long.toBinaryString(subKeyF[i])); */
         }
     }
     
 
+    //Note(sharo): one based? maybe...access is one based
     public long getRoundKey(int roundNumber) {
-        return subKeyF[roundNumber];
+        return subKeyF[roundNumber-1];
     }
 
     private void GenerateSubKeyCD() { 
