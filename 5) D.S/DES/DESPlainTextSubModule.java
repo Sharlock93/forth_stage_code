@@ -105,6 +105,7 @@ public class DESPlainTextSubModule {
         }
 
         LR32 finalRound = new LR32(nextRoundInput);
+
         long roundOutput = ((long) finalRound.R << 32 ) |
                            ((finalRound.L) & 0xFFFF_FFFFL );
         roundOutput = permutateUsingTable(roundOutput, FP, 64);
