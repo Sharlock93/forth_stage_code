@@ -107,50 +107,22 @@ public class DESPlainTextSubModule {
         LR32 finalRound = new LR32(nextRoundInput);
         long roundOutput = ((long) finalRound.R << 32 ) |
                            ((finalRound.L) & 0xFFFF_FFFFL );
-        roundOutput = permutateUsingTable(roundOutput, finalPermuation, 64);
+        roundOutput = permutateUsingTable(roundOutput, FP, 64);
         return roundOutput;
-    }
-
-
-    private void testGround() {
-        long string = 0b0000_0001_0010_0011_0100_0101_0110_0111_1000_1001_1010_1011_1100_1101_1110_1111L;
-        long PE = permutateUsingTable( string, IP, 64 );
-        long nextRoundInput = Round(PE, keySch.getRoundKey(1));
-        for(int i = 2; i <= 16; ++i ) {
-            nextRoundInput = Round(nextRoundInput, keySch.getRoundKey(i));
-            System.out.println("Round " + i + " " + Long.toBinaryString(nextRoundInput));
-        }
-
-        LR32 finalRound = new LR32(nextRoundInput);
-        long roundOutput = ((long) finalRound.R << 32 ) | ((finalRound.L) & 0xFFFF_FFFFL );
-        roundOutput = permutateUsingTable(roundOutput, finalPermuation, 64);
-        System.out.println(Long.toHexString(roundOutput));
-    }
-    
+    } 
 
     private long Round(long inputP, long roundKey) {
         LR32 round = new LR32(inputP);
-        LR32 nextRound = new LR32();
         round.RE48 = round.RE48 ^ roundKey;
-
-        /* System.out.println("KXR " + Long.toBinaryString(round.RE48)); */
         int R32Sbox = 0;
         for(int i = 1; i <= 8; ++i) {
             R32Sbox = ( R32Sbox << 4) | SBoxReduction6Bit(i, round.getSBoxGroup(i));
         }
-
-        int nextRoundR = (int)permutateUsingTable( R32Sbox, PafterSbox, 32)^round.L;
+        int nextRoundR = (int)permutateUsingTable( R32Sbox, PSbox, 32)^round.L;
         long roundOutput = ((long) round.R << 32 ) | ((nextRoundR) & 0xFFFF_FFFFL );
-
-        /* System.out.println("KXR " + Long.toBinaryString(roundOutput)); */
         return roundOutput;
     }
     
-    /* public String generateCipher() { */
-    /*  */
-    /*     return ""; */
-    /* } */
-
     private int SBoxReduction6Bit(int sBoxNumber, int input6B) {
         int row = ( (0b00100000 & input6B) >>> 4 ) | (input6B & 1);
         int column    = ( 0b00011110 & input6B) >>> 1;
@@ -164,11 +136,9 @@ public class DESPlainTextSubModule {
         long res = 0;
 
         for(int i = 0; i < permutation.length; ++i) {
-            //Note(sharo): 64 is not really correct, and should be changed.
             long whereToPutBit = (permutation.length - i -1);
             checkBit =(01L << (numberOfBits - permutation[i])); 
             bitCheckResult =  (number & checkBit);
-            /* resString += (bitCheckResult != 0) ? "1": "0";  */
             res |= (bitCheckResult != 0) ? (01L << whereToPutBit) : 0;
         }
 
@@ -187,12 +157,6 @@ public class DESPlainTextSubModule {
             while(groupText.length() < 8) groupText += "0";
             groupedTexts[j] = groupText;
         }
-
-        for(int i = 0; i < groupedTexts.length; ++i) {
-            System.out.println("G " + i + " " + groupedTexts[i]);
-        }
-
-         
         return groupedTexts;
     }
         
@@ -204,12 +168,5 @@ public class DESPlainTextSubModule {
         }
         return result; 
     }
-
-    public static void main(String[] args) {
-        DESPlainTextSubModule shar = new DESPlainTextSubModule("Hello", 0x3132333435363738L);
-        System.out.println(shar.encryptText("123456"));
-            
-    }
-
-
+ 
 }
