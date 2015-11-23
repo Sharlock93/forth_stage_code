@@ -22,7 +22,8 @@ public class shSchMain {
 
         shSch shar = new shSch(procs);
         System.out.println();
-        shar.executeFCFS();
+        shar.exec();
+        /* shar.executeFCFS(); */
         shar.printStuff();
 
     }

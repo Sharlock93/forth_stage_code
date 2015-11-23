@@ -5,6 +5,7 @@ public class shProc {
     int arrive_time;
     int turn_around_time;
     int finish_time;
+    int original_arrivale_time;
 
 
     public shProc(int id, int burst_time, int arrive_time) {
@@ -12,5 +13,6 @@ public class shProc {
         this.burst_time = burst_time;
         this.wait_time = 0;
         this.arrive_time = arrive_time;
+        original_arrivale_time = arrive_time;
     }
 }

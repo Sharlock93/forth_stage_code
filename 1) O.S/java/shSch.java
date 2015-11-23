@@ -8,9 +8,8 @@ public class shSch {
 
     public shSch(shProc[] procs) {
         this.process = procs;
-        preemptive = true;
+        preemptive = false;
         execution_pointer = -1;
-
         for(int i = 0; i < process.length; ++i) {
             for(int j = i; j < process.length; ++j) {
                 if(process[i].arrive_time > process[j].arrive_time) {
@@ -20,8 +19,6 @@ public class shSch {
                 }
             } 
         }
-
-
     }
     
     public void executeFCFS() {
@@ -52,8 +49,7 @@ public class shSch {
                 execution_pointer = processToExec();
                 if(execution_pointer >= 0) {
                 	execute_for = (preemptive) ? 1 : process[execution_pointer].burst_time;
-                    runProcess(execution_pointer, execute_for);
-                    
+                    runProcess(execution_pointer, execute_for, total_time_spend);
                 }
             } else {
             	System.out.println("Waiting...");
@@ -68,7 +64,7 @@ public class shSch {
 //            	
 //            }
             //if(execution_pointer >= 0)
-            	reduceETA(execution_pointer, (preemptive) ? 1 : execute_for); 
+            reduceETA(execution_pointer, (preemptive) ? 1 : execute_for); 
             total_time_spend++;
         } 
     }
@@ -91,13 +87,17 @@ public class shSch {
 
         return true;
     }
-    private void runProcess(int index, int amount) {
+    private void runProcess(int index, int amount, int time_spend) {
 
         process[index].burst_time -= amount;
         System.out.print("Running process: " + (index + 1) + " for " + amount + " seconds");
         System.out.println("has been waiting for " + process[index].wait_time + " BT is now: " + process[index].burst_time);
-        if(process[index].burst_time <= 0)
-            process[index].burst_time = 0;
+        if(process[index].burst_time <= 0) {
+            /* System.out.print(time_spend); */
+            process[index].finish_time = time_spend;
+            process[index].turn_around_time = process[index].finish_time - process[index].original_arrivale_time;
+            process[index].burst_time = 0; 
+        }
     }
 
     /* private int runProcessForSecs(shProc process, int time) { */
@@ -150,9 +150,12 @@ public class shSch {
 
 
     public void printStuff() {
-        String form = "pprocess id: %d has %d exec time, waited: %d, turn: %d";
+        String form = "pprocess id: %d has %d exec time, waited: %d, turn: %d, f_time: %d";
         for(int i = 0; i < process.length; ++i) {
-            System.out.println(String.format(form, process[i].id, process[i].burst_time, process[i].wait_time, process[i].turn_around_time));
+            System.out.println(String.format(form, process[i].id, process[i].burst_time,
+                                             process[i].wait_time,
+                                             process[i].turn_around_time,
+                                             process[i].finish_time));
         }
 //        System.out.println("time spent exec: " + total_time_spend);
 //        System.out.println("time spent waiting: " + total_time_waited);
