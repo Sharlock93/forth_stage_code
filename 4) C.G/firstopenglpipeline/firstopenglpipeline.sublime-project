@@ -1,0 +1,31 @@
+{
+    "build_systems": [], 
+    "folders": [
+        {
+            "path": "S:\\Test\\firstopenglpipeline"
+        }
+    ], 
+    "settings": {
+        "additional_flags": [
+            "Wall", 
+            "std=gnu++11", 
+            "D__USE_MINGW_ANSI_STDIO=1"
+        ], 
+        "cc": "g++", 
+        "include_dir": [
+            "header",
+            "C:\\dev\\lib\\include"
+        ], 
+        "lib_dir": [
+            "C:\\dev\\lib\\freeglut\\lib\\x64"
+        ], 
+        "lib_names": [
+            "freeglut_static",
+            "opengl32",
+            "winmm",
+            "gdi32",
+            "glu32"
+        ], 
+        "main_file": "firstopenglpipeline"
+    }
+}

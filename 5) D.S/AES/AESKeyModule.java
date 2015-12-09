@@ -9,6 +9,12 @@ public class AESKeyModule {
                 originalKeys128[j][i] = (byte)input.charAt(i*4 + j);
             }
         }
+
+        test();
+    }
+
+    private void test() {
+        byte[] l = {1, 2, 3, 4};
     }
 
     public void printArray() {
@@ -22,6 +28,8 @@ public class AESKeyModule {
 
     public byte[] expandWord(byte[] wordI, byte[] wordI3) {
         byte[] newWord = new byte[wordI.length];
+        wordI3 = gFunction(wordI3);
+        return newWord;
     }
 
     private byte[] gFunction(byte[] inputWord) {
@@ -30,10 +38,12 @@ public class AESKeyModule {
         for (int i = 0; i < 4; i++) {
             temp[i] = AESOps.SubSt(temp[i]);
         }
+
+        return temp;
     }
 
     
     public static void main(String[] args) {
-        new AESKeyModule("1234567890123456").printArray();
+        new AESKeyModule("1234567890123456");
     }
 } 
