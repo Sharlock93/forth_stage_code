@@ -6,4 +6,6 @@
 *.mf
 *.ico
 *.xml
+*.o
+*.exe
 *.xmi
