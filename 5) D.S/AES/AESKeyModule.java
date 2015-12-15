@@ -1,13 +1,13 @@
 import java.util.*;
 public class AESKeyModule {
 
-    byte[][] expandedKeys = new byte[44][4];
+    byte[][] expandedKeys = new byte[44][4]; //44 words, each 4 bytes.
 
     public AESKeyModule(String input) {
-        
+        //Note(sharo): convert input into integer. 
         for (int i = 0; i < 4; ++i) {
             for (int j = 0; j < 4; j++) {
-                expandedKeys[j][i] = (byte)input.charAt(i*4 + j);
+                expandedKeys[i][j] = (byte)input.charAt(i*4 + j);
             }
         }
 
@@ -24,9 +24,9 @@ public class AESKeyModule {
                 expandedKeys[i] =  AESOps.xorArray(expandedKeys[i-1], expandedKeys[i-4]);
             }
         }
-
         
-        printArray(expandedKeys);
+        //Note(sharo): uncomment for printed output
+        /* printArray(expandedKeys); */
 
         
         return expandedKeys;
