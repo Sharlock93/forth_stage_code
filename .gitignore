@@ -9,3 +9,10 @@
 *.o
 *.exe
 *.xmi
+*.BAK
+*.bk1
+*.inc
+*.pre
+*.vpr
+*Exe
+*Obj
