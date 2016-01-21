@@ -47,4 +47,13 @@ public class shProcess {
         System.out.printf("ID: %d, Burst: %d, Remaining Burst: %d Wait: %d, Finish: %d, TurnAround: %d\n", 
                             ID, InitBurst, RemainingBurst, WaitTime, finisheTime, finisheTime-ArriveTime);
     }
+
+    public int getID() {
+        return ID;
+    }
+
+    public int getBurst() {
+        return RemainingBurst;
+    }
+    
 } 

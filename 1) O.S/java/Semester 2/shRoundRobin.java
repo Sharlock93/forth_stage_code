@@ -1,14 +1,15 @@
 public class shRoundRobin {
     private shProcess[] processes;
+    private int quanta;
 
-    public shRoundRobin(shProcess[] prot) {
+    public shRoundRobin(shProcess[] prot, int quanta) {
         processes = prot;
+        this.quanta = quanta;
     }
 
     public void run() {
         //Note(sharo): start from -1 because first process is zero
         int nextProcess = -1;
-        int quanta = 2;
         int totalTime = 0;
         while(!allDone()) {
             nextProcess = (++nextProcess) % processes.length;
@@ -18,7 +19,8 @@ public class shRoundRobin {
             
             int timeReminder = processes[nextProcess].execute(totalTime, quanta);
             totalTime = totalTime + quanta - timeReminder;
-
+ 
+            printRunning(nextProcess, quanta, timeReminder);
             for (int i = 0; i < processes.length; i++) {
                 if(i == nextProcess) continue;
                 processes[i].wait(quanta - timeReminder);
@@ -36,5 +38,10 @@ public class shRoundRobin {
         } 
 
         return true;
+    }
+
+    private void printRunning(int index, int quanta, int remaining) {
+        String info = "ID: %d, ran for: %d, remaining burst: %d \n"; 
+        System.out.printf(info, processes[index].getID(), quanta - remaining, processes[index].getBurst());
     }
 }
